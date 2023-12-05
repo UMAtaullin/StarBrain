@@ -2,7 +2,12 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 
 
-menu = ["О сайте", "Добавить статью", "Обратная связь", "Войти"]
+menu = [
+    {'title': "Главная страница", 'url_name': 'home'},
+    {'title': "О сайте", 'url_name': 'about'},
+    {'title': "Добавить статью", 'url_name': 'add_page'},
+    {'title': "Обратная связь", 'url_name': 'contact'},
+    {'title': "Войти", 'url_name': 'login'}]
 
 data_db = [
     {'id': 1,
@@ -37,12 +42,20 @@ def about(request):
                                                   "title": "О сайте"})
 
 
-def categories(request, cat_id):
-    return HttpResponse(f"<h1>Статьи по категориям</h1><p>id: {cat_id}<p>")
+def show_post(request, post_id):
+    return HttpResponse("<h1>Отображение статьи с id = {post_id}</h1>")
 
 
-def categories_by_slug(request, cat_slug):
-    return HttpResponse(f"<h1>Статьи по категориям</h1><p>slug: {cat_slug}<p>")
+def addpage(request):
+    return HttpResponse("Добавление статьи")
+
+
+def contact(request):
+    return HttpResponse("Обратная связь")
+
+
+def login(request):
+    return HttpResponse("Авторизация")
 
 
 def page_not_found(request, exception):

@@ -5,11 +5,16 @@
 <p>Содержимое главное страницы<p>
 <ul>
   {% for p in post %}
+  {% if p.is_published %}
   <li>
     <h2>{{ p.title }}</h2>
     <p>{{ p.content }}</p>
+    <p><a href="{% url 'post' p.id %}">Читать пост</a></p>
+    {% if not forloop.last %}   <!--Правда, если не последняя итерация.-->
     <hr>
+    {% endif %}
   </li>
+  {% endif %}
   {% endfor %}
 </ul>
 {% endblock %}
