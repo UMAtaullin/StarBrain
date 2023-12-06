@@ -1,20 +1,15 @@
-{% extends "starmen/base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-<h1>{{ title }}</h1>
-<p>Содержимое главное страницы<p>
-<ul>
-  {% for p in post %}
-  {% if p.is_published %}
-  <li>
-    <h2>{{ p.title }}</h2>
-    <p>{{ p.content }}</p>
-    <p><a href="{% url 'post' p.id %}">Читать пост</a></p>
-    {% if not forloop.last %}   <!--Правда, если не последняя итерация.-->
-    <hr>
-    {% endif %}
-  </li>
-  {% endif %}
-  {% endfor %}
+<ul class="list-articles">
+	{% for p in post %}
+	{% if p.is_published %}
+			<li><h2>{{p.title}}</h2>
+	{{p.content|linebreaks|truncatewords:50}}
+			<div class="clear"></div>
+			<p class="link-read-post"><a href="{% url 'post' p.id %}">Читать пост</a></p>
+			</li>
+	{% endif %}
+	{% endfor %}
 </ul>
 {% endblock %}

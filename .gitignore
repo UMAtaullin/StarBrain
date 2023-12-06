@@ -156,3 +156,7 @@ cython_debug/
 .idea/
 .vscode/
 .pylintrc
+
+# media
+static/
+media/
