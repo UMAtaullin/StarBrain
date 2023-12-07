@@ -18,6 +18,12 @@ data_db = [
         'content': 'Биография Махатма Ганди', 'is_published': True},
 ]
 
+cats_db = [
+    {'id': 1, 'name': 'Ученые'},
+    {'id': 2, 'name': 'Предприниматели'},
+    {'id': 3, 'name': 'Политики'},
+]
+
 
 def index(request):
     return render(
@@ -25,7 +31,8 @@ def index(request):
         "starmen/index.html",
         {"menu": menu,
          "title": "Главная страница",
-         "post": data_db},
+         "post": data_db,
+         "cat_selected": 0},
     )
 
 
@@ -48,6 +55,17 @@ def contact(request):
 
 def login(request):
     return HttpResponse("Авторизация")
+
+
+def show_category(request, cat_id):
+    return render(
+        request,
+        "starmen/index.html",
+        {"menu": menu,
+         "title": "Отображение по рубрикам",
+         "post": data_db,
+         "cat_selected": cat_id},
+    )
 
 
 def page_not_found(request, exception):

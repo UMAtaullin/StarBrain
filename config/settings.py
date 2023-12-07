@@ -1,6 +1,8 @@
 from pathlib import Path
 from re import template
 
+from django.conf.global_settings import STATICFILES_DIRS
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-^ockb-dpv!^$e4+ct*sov3f(7q^*0nuqzzi)(^t_)jx6ed8zig'
