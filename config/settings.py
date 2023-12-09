@@ -19,6 +19,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # tools
+    'django_extensions',
+    # local apps
     'starmen.apps.StarmenConfig',
 ]
 
