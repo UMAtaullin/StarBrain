@@ -1,12 +1,12 @@
 from django.urls import path
 
-from .views import (index,
-                    about,
+from .views import (about,
                     addpage,
                     contact,
+                    index,
                     login,
-                    show_post,
-                    show_category,)
+                    show_category,
+                    show_post)
 
 urlpatterns = [
     path('', index, name='home'),

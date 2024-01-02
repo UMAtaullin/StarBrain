@@ -1,6 +1,6 @@
 from django import template
-import starmen.views as views
 
+import starmen.views as views
 
 register = template.Library()
 

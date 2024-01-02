@@ -2,7 +2,7 @@
 
 {% block content %}
 <ul class="list-articles">
-	{% for p in post %}
+	{% for p in posts %}
 	{% if p.is_published %}
 			<li><h2>{{p.title}}</h2>
 	{% autoescape off %}
