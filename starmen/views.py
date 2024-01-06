@@ -1,5 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
+
+from starmen.models import Starmen
 
 menu = [
     {'title': 'Главная страница', 'url_name': 'home'},
@@ -43,11 +45,18 @@ def about(request):
         'title': 'О сайте',
         'menu': menu,
     }
-    return render(request, 'starmen/about.html', context=data)
+    return render(request, 'starmen/about.html', data)
 
 
 def show_post(request, post_id):
-    return HttpResponse('<h1>Отображение статьи с id = {post_id}</h1>')
+    post = get_object_or_404(Starmen, pk=post_id)
+    data = {
+        'title': 'post.title',
+        'menu': menu,
+        'post': post,
+        'cat_selected': 1
+    }
+    return render(request, 'starmen/post.html', data)
 
 
 def addpage(request):
@@ -69,7 +78,7 @@ def show_category(request, cat_id):
         'posts': data_db,
         'cat_selected': cat_id
     }
-    return render(request, 'starmen/index.html', context=data)
+    return render(request, 'starmen/index.html', data)
 
 
 def page_not_found(request, exception):
