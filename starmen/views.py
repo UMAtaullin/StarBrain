@@ -27,10 +27,11 @@ cats_db = [
 
 
 def index(request):
+    posts = Starmen.objects.filter(is_published=1)
     data = {
         'title': 'Главная страница',
         'menu': menu,
-        'posts': data_db,
+        'posts': posts,
         'cat_selected': 0
     }
     return render(
@@ -48,8 +49,8 @@ def about(request):
     return render(request, 'starmen/about.html', data)
 
 
-def show_post(request, post_id):
-    post = get_object_or_404(Starmen, pk=post_id)
+def show_post(request, post_slug):
+    post = get_object_or_404(Starmen, slug=post_slug)
     data = {
         'title': 'post.title',
         'menu': menu,
