@@ -1,4 +1,3 @@
-from enum import unique
 from django.urls import reverse
 from django.db import models
 
@@ -21,7 +20,7 @@ class Starmen(models.Model):
     time_update = models.DateTimeField(auto_now=True)
     is_published = models.BooleanField(
         choices=Status.choices, default=Status.PUBLISHED)
-    cat = models.ForeignKey('Category', on_delete=models.PROTECT, null=True)
+    cat = models.ForeignKey('Category', on_delete=models.PROTECT)
 
     published = PublishedManager()
     objects = models.Manager()
