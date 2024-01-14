@@ -1,16 +1,12 @@
 from django import template
+from starmen.models import Category
 
 import starmen.views as views
 
 register = template.Library()
 
 
-@register.simple_tag()
-def get_categories():
-    return views.cats_db
-
-
 @register.inclusion_tag('starmen/list_categories.html')
-def show_categories(cat_selected=0):
-    cats = views.cats_db
-    return {'cats': cats, 'cat_selected': cat_selected}
+def show_categories(cat_selected_id=0):
+    cats = Category.objects.all()
+    return {'cats': cats, 'cat_selected': cat_selected_id}

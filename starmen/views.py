@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render
 
-from starmen.models import Starmen
+from starmen.models import Category, Starmen
 
 menu = [
     {'title': 'Главная страница', 'url_name': 'home'},
@@ -63,12 +63,14 @@ def login(request):
     return HttpResponse('Авторизация')
 
 
-def show_category(request, cat_id):
+def show_category(request, cat_slug):
+    category = get_object_or_404(Category, slug=cat_slug)
+    posts = Starmen.published.filter(cat_id=category.pk)
     data = {
-        'title': 'Отображение по рубрикам',
+        'title': f'Рубрика: {category.name}',
         'menu': menu,
-        'posts': Starmen.published.all(),
-        'cat_selected': cat_id
+        'posts': posts,
+        'cat_selected': category.pk
     }
     return render(request, 'starmen/index.html', data)
 
