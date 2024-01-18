@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render
 
-from starmen.models import Category, Starmen
+from starmen.models import Category, Starmen, TagPost
 
 menu = [
     {'title': 'Главная страница', 'url_name': 'home'},
@@ -77,3 +77,16 @@ def show_category(request, cat_slug):
 
 def page_not_found(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена</h1>')
+
+
+def show_tag_postlist(request, tag_slug):
+    tag = get_object_or_404(TagPost, slug=tag_slug)
+    posts = tag.tags.filter(is_published=Starmen.Status.PUBLISHED)
+
+    data = {
+        'title': f'Тег: {tag.tag}',
+        'menu': menu,
+        'posts': posts,
+        'cat_selected': None
+    }
+    return render(request, 'starmen/index.html', data)
