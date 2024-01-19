@@ -24,6 +24,10 @@ class Starmen(models.Model):
     cat = models.ForeignKey('Category', on_delete=models.PROTECT,
                             related_name='posts')
     tags = models.ManyToManyField('TagPost', blank=True, related_name='tags')
+    spouse = models.OneToOneField('Spouse',
+                                  on_delete=models.SET_NULL,
+                                  null=True, blank=True,
+                                  related_name='partner')
 
     published = PublishedManager()
     objects = models.Manager()
@@ -59,3 +63,11 @@ class TagPost(models.Model):
 
     def get_absolute_url(self):
         return reverse('tag', kwargs={'tag_slug': self.slug})
+
+
+class Spouse(models.Model):
+    name = models.CharField(max_length=100)
+    age = models.IntegerField(null=True)
+
+    def __str__(self):
+        return self.name
