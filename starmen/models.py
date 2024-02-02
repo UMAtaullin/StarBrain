@@ -1,3 +1,4 @@
+from tabnanny import verbose
 from unittest.util import _MAX_LENGTH
 from django.urls import reverse
 from django.db import models
@@ -36,6 +37,8 @@ class Starmen(models.Model):
         return self.title
 
     class Meta:
+        verbose_name = 'Известные люди'
+        verbose_name_plural = 'Известные люди'
         ordering = ['-time_create']
         indexes = [models.Index(fields=['time_create'])]
 

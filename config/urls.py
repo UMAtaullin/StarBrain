@@ -6,3 +6,7 @@ urlpatterns = [
     path('', include('starmen.urls')),
     path('__debug__/', include('debug_toolbar.urls')),
 ]
+
+
+admin.site.site_header = 'Панель администрирования'
+admin.site.index_title = 'Лучшие умы человечества'
