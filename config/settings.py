@@ -10,6 +10,7 @@ SECRET_KEY = 'django-insecure-^ockb-dpv!^$e4+ct*sov3f(7q^*0nuqzzi)(^t_)jx6ed8zig
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
+INTERNAL_IPS = ['127.0.0.1']
 
 
 INSTALLED_APPS = [
@@ -21,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # tools
     'django_extensions',
+    'debug_toolbar',
     # local apps
     'starmen.apps.StarmenConfig',
 ]
@@ -33,6 +35,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
