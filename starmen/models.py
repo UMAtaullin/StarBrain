@@ -1,5 +1,3 @@
-from tabnanny import verbose
-from unittest.util import _MAX_LENGTH
 from django.urls import reverse
 from django.db import models
 
@@ -44,8 +42,9 @@ class Starmen(models.Model):
                                   related_name='partner',
                                   verbose_name='Супруги')
 
-    published = PublishedManager()
     objects = models.Manager()
+    published = PublishedManager()
+
 
     class Meta:
         verbose_name = 'Известные люди'
