@@ -21,6 +21,12 @@ class SpouseFilter(admin.SimpleListFilter):
 
 @admin.register(Starmen)  # admin.site.register(Starmen, StarmenAdmin)
 class StarmenAdmin(admin.ModelAdmin):
+    # только те поля в том же порядке, которые будут отображаться в форме.
+    fields = ['title',  'slug', 'content', 'cat', 'spouse', 'tags']
+    # будут отображаться в форме но не редактироваться
+    # readonly_fields = ['slug']
+    prepopulated_fields = {'slug': ('title',)}  # автозаполнение slug на основе title.
+    filter_horizontal = ['tags']
     list_display = ('id',   # список отображаемых полей модели.
                     'title',
                     'time_create',
