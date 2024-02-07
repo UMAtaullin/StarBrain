@@ -46,11 +46,11 @@ class Starmen(models.Model):
                                   blank=True,
                                   related_name='tags',
                                   verbose_name='Теги')
-    spouse = models.OneToOneField('Spouse',
-                                  on_delete=models.SET_NULL,
-                                  null=True, blank=True,
-                                  related_name='partner',
-                                  verbose_name='Супруги')
+    company = models.OneToOneField('Company',
+                                   on_delete=models.SET_NULL,
+                                   null=True, blank=True,
+                                   related_name='company',
+                                   verbose_name='Компания')
 
     objects = models.Manager()
     published = PublishedManager()
@@ -100,7 +100,7 @@ class TagPost(models.Model):
         return reverse('tag', kwargs={'tag_slug': self.slug})
 
 
-class Spouse(models.Model):
+class Company(models.Model):
     name = models.CharField(max_length=100)
     age = models.IntegerField(null=True)
     s_count = models.IntegerField(blank=True, default=0)

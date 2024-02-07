@@ -2,7 +2,7 @@ from django.contrib import admin, messages
 from .models import Starmen, Category
 
 
-class SpouseFilter(admin.SimpleListFilter):
+class CompanyFilter(admin.SimpleListFilter):
     title = 'Семейное положение'
     parameter_name = 'status'
 
@@ -14,15 +14,15 @@ class SpouseFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == 'married':
-            return queryset.filter(spouse__isnull=False)
+            return queryset.filter(company__isnull=False)
         elif self.value() == 'single':
-            return queryset.filter(spouse__isnull=True)
+            return queryset.filter(company__isnull=True)
 
 
 @admin.register(Starmen)  # admin.site.register(Starmen, StarmenAdmin)
 class StarmenAdmin(admin.ModelAdmin):
     # только те поля в том же порядке, которые будут отображаться в форме.
-    fields = ['title',  'slug', 'content', 'cat', 'spouse', 'tags']
+    fields = ['title',  'slug', 'content', 'cat', 'company', 'tags']
     # будут отображаться в форме но не редактироваться
     # readonly_fields = ['slug']
     prepopulated_fields = {'slug': ('title',)}  # автозаполнение slug на основе title.
@@ -42,7 +42,7 @@ class StarmenAdmin(admin.ModelAdmin):
     actions = ['set_published', 'set_draft']
     # список полей, по которым осуществляется поиск.
     search_fields = ['title__startswith', 'cat__name']
-    list_filter = [SpouseFilter, 'cat__name', 'is_published']
+    list_filter = [CompanyFilter, 'cat__name', 'is_published']
 
     @admin.display(description='Краткое описание', ordering='content')
     def brief_info(self, starmen: Starmen):
