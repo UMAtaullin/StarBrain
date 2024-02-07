@@ -1,6 +1,6 @@
 from django.urls import reverse
 from django.db import models
-from django.template.defaultfilters import slugify
+# from django.template.defaultfilters import slugify
 
 
 def translit_to_eng(s: str):
