@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseNotFound
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from starmen.forms import AddPostForm
 
 from starmen.models import Category, Starmen, TagPost
@@ -56,10 +56,15 @@ def addpage(request):
     if request.method == 'POST':
         form = AddPostForm(request.POST)
         if form.is_valid():
-            print(form.cleaned_data)
+            # print(form.cleaned_data)
+            try:
+                Starmen.objects.create(**form.cleaned_data)
+                return redirect('home')
+            except:
+                form.add_error(None, 'Ошибка при добавлении поста')
     else:
         form = AddPostForm()
-        
+
     data = {
         'title': 'Добавление статьи',
         'menu': menu,
