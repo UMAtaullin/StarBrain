@@ -27,7 +27,8 @@ class Starmen(models.Model):
                              verbose_name='Заголовок')
     slug = models.SlugField(max_length=255,
                             unique=True,
-                            db_index=True)
+                            db_index=True,
+                            verbose_name='URL')
     content = models.TextField(blank=True,
                                verbose_name='Текст статьи')
     time_create = models.DateTimeField(auto_now_add=True,
