@@ -29,6 +29,9 @@ class Starmen(models.Model):
                             unique=True,
                             db_index=True,
                             verbose_name='URL')
+    photo = models.ImageField(upload_to='photo/%Y/%m/%d/',
+                              default=None, blank=True, null=True,
+                              verbose_name='Фото')
     content = models.TextField(blank=True,
                                verbose_name='Текст статьи')
     time_create = models.DateTimeField(auto_now_add=True,
@@ -108,3 +111,8 @@ class Company(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class UploadFiles(models.Model):
+    """Модель таблицы в которой храняться ссылки на загруженные файлы."""
+    file = models.FileField(upload_to='uploads')

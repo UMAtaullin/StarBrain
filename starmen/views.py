@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, redirect, render
 from starmen.forms import AddPostForm, UploadFileForm
 
-from starmen.models import Category, Starmen, TagPost
+from starmen.models import Category, Starmen, TagPost, UploadFiles
 
 menu = [
     {'title': 'Главная страница', 'url_name': 'home'},
@@ -33,17 +33,21 @@ def index(request):
     )
 
 
-def handle_uploaded_file(f):
-    with open(f"uploads/{f.name}", "wb+") as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
+# def handle_uploaded_file(f):
+#     with open(f"uploads/{f.name}", "wb+") as destination:
+#         for chunk in f.chunks():
+#             destination.write(chunk)
 
 
 def about(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            handle_uploaded_file(form.cleaned_data['file'])
+            # handle_uploaded_file(form.cleaned_data['file'])
+            # cleaned_data - это словарь, который содержит данные из формы,
+            # прошедшие все валидации, определенные в форме
+            fp = UploadFiles(file=form.cleaned_data['file'])
+            fp.save()
     else:
         form = UploadFileForm()
     data = {
@@ -67,7 +71,7 @@ def show_post(request, post_slug):
 
 def addpage(request):
     if request.method == 'POST':
-        form = AddPostForm(request.POST)
+        form = AddPostForm(request.POST, request.FILES)
         if form.is_valid():
             # # print(form.cleaned_data)
             # try:

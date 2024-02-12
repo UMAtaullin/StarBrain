@@ -18,7 +18,7 @@ class AddPostForm(forms.ModelForm):
 
     class Meta:
         model = Starmen     # Описывает взаимосвязь формы с моделью.
-        fields = ('title', 'slug', 'content',
+        fields = ('title', 'slug', 'content', 'photo',
                   'is_published', 'cat', 'company', 'tags',)
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-input'}),
