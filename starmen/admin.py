@@ -1,4 +1,5 @@
 from django.contrib import admin, messages
+from django.utils.safestring import mark_safe
 from .models import Starmen, Category
 
 
@@ -21,18 +22,18 @@ class CompanyFilter(admin.SimpleListFilter):
 
 @admin.register(Starmen)  # admin.site.register(Starmen, StarmenAdmin)
 class StarmenAdmin(admin.ModelAdmin):
-    # только те поля в том же порядке, которые будут отображаться в форме.
-    fields = ['title',  'slug', 'content', 'cat', 'company', 'tags']
+    # поля, которые будут отображаться в форме редактирования статьи.
+    fields = ('title',  'slug', 'content', 'photo', 'post_photo', 'cat', 'company', 'tags')
     # будут отображаться в форме но не редактироваться
-    # readonly_fields = ['slug']
+    readonly_fields = ['post_photo']
     prepopulated_fields = {'slug': ('title',)}  # автозаполнение slug на основе title.
     filter_horizontal = ['tags']
     list_display = ('id',   # список отображаемых полей модели.
                     'title',
+                    'post_photo',
                     'time_create',
                     'is_published',
-                    'cat',
-                    'brief_info',)
+                    'cat',)
     list_display_links = ('id',     # список кликабельных полей модели.
                           'title')
     ordering = ['time_create', 'title']
@@ -43,10 +44,13 @@ class StarmenAdmin(admin.ModelAdmin):
     # список полей, по которым осуществляется поиск.
     search_fields = ['title__startswith', 'cat__name']
     list_filter = [CompanyFilter, 'cat__name', 'is_published']
+    save_on_top = True
 
-    @admin.display(description='Краткое описание', ordering='content')
-    def brief_info(self, starmen: Starmen):
-        return f'В описании {len(starmen.content)} символов.'
+    @admin.display(description='Изображение', ordering='content')
+    def post_photo(self, starmen: Starmen):
+        if starmen.photo:
+            return mark_safe(f'<img src="{starmen.photo.url}" width=50>')
+        return 'Без фото'
 
     @admin.action(description='Опубликовать выбранные записи')
     def set_published(self, request, queryset):
