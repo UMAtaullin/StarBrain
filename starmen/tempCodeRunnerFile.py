@@ -1,1 +1,1 @@
-Spouse
+class UploadFiles(models.Model)

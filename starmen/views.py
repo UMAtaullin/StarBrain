@@ -1,5 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound
+from django.views.generic.base import TemplateView
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views import View
 from starmen.forms import AddPostForm, UploadFileForm
 
 from starmen.models import Category, Starmen, TagPost, UploadFiles
@@ -33,10 +35,14 @@ def index(request):
     )
 
 
-# def handle_uploaded_file(f):
-#     with open(f"uploads/{f.name}", "wb+") as destination:
-#         for chunk in f.chunks():
-#             destination.write(chunk)
+class StarmenHome(TemplateView):
+    template_name = 'starmen/index.html'
+    extra_context = {
+        'title': 'Главная страница',
+        'menu': menu,
+        'posts': Starmen.published.all().select_related('cat'),
+        'cat_selected': 0
+    }
 
 
 def about(request):
@@ -90,6 +96,30 @@ def addpage(request):
         'form': form,
     }
     return render(request, 'starmen/addpage.html', data)
+
+
+class AddPage(View):
+
+    def get(self, request):
+        form = AddPostForm()
+        data = {
+            'title': 'Добавление статьи',
+            'menu': menu,
+            'form': form,
+        }
+        return render(request, 'starmen/addpage.html', data)
+
+    def post(self, request):
+        form = AddPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+        data = {
+            'title': 'Добавление статьи',
+            'menu': menu,
+            'form': form,
+        }
+        return render(request, 'starmen/addpage.html', data)
 
 
 def contact(request):
