@@ -1,5 +1,7 @@
+from typing import Any
+from django.db.models.query import QuerySet
 from django.http import HttpResponse, HttpResponseNotFound
-from django.views.generic.base import TemplateView
+from django.views.generic import ListView
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from starmen.forms import AddPostForm, UploadFileForm
@@ -20,29 +22,33 @@ cats_db = [
 ]
 
 
-def index(request):
-    posts = Starmen.published.all().select_related('cat')
-    data = {
-        'title': 'Главная страница',
-        'menu': menu,
-        'posts': posts,
-        'cat_selected': 0
-    }
-    return render(
-        request,
-        'starmen/index.html',
-        context=data
-    )
+# def index(request):
+#     posts = Starmen.published.all().select_related('cat')
+#     data = {
+#         'title': 'Главная страница',
+#         'menu': menu,
+#         'posts': posts,
+#         'cat_selected': 0
+#     }
+#     return render(
+#         request,
+#         'starmen/index.html',
+#         context=data
+#     )
 
 
-class StarmenHome(TemplateView):
+class StarmenHome(ListView):
+    # model = Starmen
     template_name = 'starmen/index.html'
+    context_object_name = 'posts'
     extra_context = {
         'title': 'Главная страница',
         'menu': menu,
-        'posts': Starmen.published.all().select_related('cat'),
         'cat_selected': 0
     }
+
+    def get_queryset(self):
+        return Starmen.published.all().select_related('cat')
 
 
 def about(request):
@@ -75,27 +81,27 @@ def show_post(request, post_slug):
     return render(request, 'starmen/post.html', data)
 
 
-def addpage(request):
-    if request.method == 'POST':
-        form = AddPostForm(request.POST, request.FILES)
-        if form.is_valid():
-            # # print(form.cleaned_data)
-            # try:
-            #     Starmen.objects.create(**form.cleaned_data)
-            #     return redirect('home')
-            # except:
-            #     form.add_error(None, 'Ошибка при добавлении поста')
-            form.save()
-            return redirect('home')
-    else:
-        form = AddPostForm()
+# def addpage(request):
+#     if request.method == 'POST':
+#         form = AddPostForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             # # print(form.cleaned_data)
+#             # try:
+#             #     Starmen.objects.create(**form.cleaned_data)
+#             #     return redirect('home')
+#             # except:
+#             #     form.add_error(None, 'Ошибка при добавлении поста')
+#             form.save()
+#             return redirect('home')
+#     else:
+#         form = AddPostForm()
 
-    data = {
-        'title': 'Добавление статьи',
-        'menu': menu,
-        'form': form,
-    }
-    return render(request, 'starmen/addpage.html', data)
+#     data = {
+#         'title': 'Добавление статьи',
+#         'menu': menu,
+#         'form': form,
+#     }
+#     return render(request, 'starmen/addpage.html', data)
 
 
 class AddPage(View):
@@ -130,16 +136,34 @@ def login(request):
     return HttpResponse('Авторизация')
 
 
-def show_category(request, cat_slug):
-    category = get_object_or_404(Category, slug=cat_slug)
-    posts = Starmen.published.filter(cat_id=category.pk).select_related('cat')
-    data = {
-        'title': f'Рубрика: {category.name}',
-        'menu': menu,
-        'posts': posts,
-        'cat_selected': category.pk
-    }
-    return render(request, 'starmen/index.html', data)
+# def show_category(request, cat_slug):
+#     category = get_object_or_404(Category, slug=cat_slug)
+#     posts = Starmen.published.filter(cat_id=category.pk).select_related('cat')
+#     data = {
+#         'title': f'Рубрика: {category.name}',
+#         'menu': menu,
+#         'posts': posts,
+#         'cat_selected': category.pk
+#     }
+#     return render(request, 'starmen/index.html', data)
+
+
+class StarmenCategory(ListView):
+    template_name = 'starmen/index.html'
+    context_object_name = 'posts'
+    allow_empty = False
+
+    def get_queryset(self):
+        return Starmen.published.filter(
+            cat__slug=self.kwargs['cat_slug']).select_related('cat')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cat = context['posts'][0].cat
+        context['title'] = 'Категория - ' + cat.name
+        context['menu'] = menu
+        context['cat_selected'] = cat.pk
+        return context
 
 
 def page_not_found(request, exception):
